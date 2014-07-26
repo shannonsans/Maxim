@@ -44,7 +44,7 @@ function Maxim(t) {
         myAudioBuffer = buffer;
         //       alert("sound decoded"); //test
         source = context.createBufferSource();
-        gainNode = context.createGainNode();
+        gainNode = context.createGain();
         filter = context.createBiquadFilter();
         analyser = context.createAnalyser();
         filter.type = 0;
@@ -73,7 +73,7 @@ function Maxim(t) {
 
     audio.cue = function(time) {
 
-	audio.stop();
+  audio.stop();
       startTime=time/1000;
     }
 
@@ -109,7 +109,7 @@ function Maxim(t) {
     audio.play = function() {
       if (source && !playing) {
         source = context.createBufferSource();
-        gainNode = context.createGainNode()
+        gainNode = context.createGain()
           filter = context.createBiquadFilter();
         filter.type = 0;
         filter.frequency.value = 20000;
@@ -125,7 +125,7 @@ function Maxim(t) {
         if (isLooping) source.loop = true;
         //          source.loopStart = startTime/1000;
         //          source.loopEnd = source.buffer.duration;
-        source.noteGrainOn(0, startTime, source.buffer.duration-startTime);
+        source.start(0, startTime, source.buffer.duration-startTime);
         playing=true;
       }
       if (analysing==true && playing) {
@@ -137,7 +137,7 @@ function Maxim(t) {
 
     audio.stop = function() {
       if (source) {
-        source.noteOff(0);
+        //source.stop(0); // Can't call stop more than once
         playing=false;
       }
     }
@@ -331,4 +331,3 @@ Synth.prototype.filterRamp = function(freq, envTime) {
   //  this.filter.frequency.value = freq;
   //  this.filter.Q.value = res;
 }
-
